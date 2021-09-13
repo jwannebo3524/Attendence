@@ -9,6 +9,6 @@ while True:
     while("yes" in no):
         print("nice to meet you, jeffry.")
         time.sleep(2)
-        no = input("wait, what was your name again- jefferybi?, right?")
+        no = input("wait, what was your name again- jeffery?, right?")
     print("so then...")
     time.sleep(0.35)

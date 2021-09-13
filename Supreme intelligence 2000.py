@@ -1,4 +1,5 @@
 import time
+#originally named Dementia bot 2000
 while True:
     name = input("what's your name?")+' '
     print(name+' is a very stupid name.')

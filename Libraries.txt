@@ -1,2 +1,3 @@
 When you use a library, add it to the list
 Libraries in use:
+pyzbar

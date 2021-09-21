@@ -12,16 +12,16 @@ class Imageifier:
     self.Framerate = framerate
   def TakeImage(self):
     with picamera.Picamera as camera:
-      camera.resolution = resolution
+      camera.resolution = self.Resolution
       if(self.Preveiw):
         camera.start_preview()
       time.sleep(self.Delay)
-      out = np.empty(resolution,dtype = np.uint8)
+      out = np.empty(self.Resolution,dtype = np.uint8)
       camera.capture(out,'rgb')
       np.save(self.File+".npy",out)
   def VideoLoop(self,Object):
     with picamera.Picamera as camera:
-      camera.resolution = resolution
+      camera.resolution = self.Resolution
       camera.framerate = self.Framerate
       if (self.Preveiw):
         camera.start_preveiw()
@@ -32,11 +32,11 @@ class Imageifier:
       camera.stop_recording()
   def ImageLoop(self,Object):
     with picamera.Picamera as camera:
-      camera.resolution = resolution
+      camera.resolution = self.Resolution
       camera.framerate = self.Framerate
       time.sleep(self.Delay)
       while not Exit.Value:
-        out = np.empty(resolution,dtype = np.uint8)
+        out = np.empty(self.Resolution,dtype = np.uint8)
         camera.capture(out,'rgb')
         Object.run(out)
         time.sleep(self.Delay2)

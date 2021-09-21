@@ -30,7 +30,7 @@ class Imageifier:
       while not Exit.Value:
         donothingvar = 0
       camera.stop_recording()
- def ImageLoop(self,Object):
+  def ImageLoop(self,Object):
     with picamera.Picamera as camera:
       camera.resolution = resolution
       camera.framerate = self.Framerate

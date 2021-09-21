@@ -3,3 +3,4 @@ Libraries in use:
 pyzbar
 time
 picamera
+numpy

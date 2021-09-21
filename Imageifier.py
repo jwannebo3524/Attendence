@@ -19,7 +19,7 @@ class Imageifier:
       out = np.empty(self.Resolution,dtype = np.uint8)
       camera.capture(out,'rgb')
       np.save(self.File+".npy",out)
-  def VideoLoop(self,Object):
+  def VideoLoop(self,Object,Exit):
     with picamera.Picamera as camera:
       camera.resolution = self.Resolution
       camera.framerate = self.Framerate
@@ -30,7 +30,7 @@ class Imageifier:
       while not Exit.Value:
         donothingvar = 0
       camera.stop_recording()
-  def ImageLoop(self,Object):
+  def ImageLoop(self,Object,Exit):
     with picamera.Picamera as camera:
       camera.resolution = self.Resolution
       camera.framerate = self.Framerate

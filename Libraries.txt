@@ -4,3 +4,5 @@ pyzbar
 time
 picamera
 numpy
+flask
+secret   (included with python)

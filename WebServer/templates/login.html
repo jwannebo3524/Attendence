@@ -1,0 +1,20 @@
+<html>
+  <head>
+    <title>Attendence Login</title>
+  </head>
+  <body>
+      <h1>Login</h1>
+      <br>
+      <form action="" method="post">
+        <input type="text" placeholder="Username" name="Username" value="{{
+          request.form.Username }}">
+         <input type="password" placeholder="Password" name="Password" value="{{
+          request.form.Password }}">
+        <input type="submit" value="Submit">
+      </form>
+      {% if message %}
+        <h2> {{ message }}</h2>
+      {% endif %}
+	
+  </body>
+</html>

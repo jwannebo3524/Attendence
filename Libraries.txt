@@ -3,3 +3,6 @@ Libraries in use:
 pyzbar
 time
 picamera
+numpy
+flask
+secret   (included with python)

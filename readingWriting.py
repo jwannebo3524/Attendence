@@ -3,20 +3,19 @@ import cv2
 from pzbar.pzbar import decode
 import time
 
-
+path = "Temporary/Path/FixThis"
 def readBar(image):
+    global path
     dectectedBarcodes = decode(image)
     for barcode in dectectedBarcodes:
-        (x, y, w, h) = barcode.rect
-        cv2.rectangle(image, (x, y), (x + w, y + h), (255, 0, 0), 5)
+      #  (x, y, w, h) = barcode.rect                       -uncomment if displaying image
+      #  cv2.rectangle(image, (x, y), (x + w, y + h), (255, 0, 0), 5)  
 
         logIn = time.time()
         file1 = open(path + "Times Logged", "r+")
         code2 = file1.read().splitlines()
         code2.reverse()
 
-        file1.write(logIn)
-        file1.close()
 
         
         print(logIn)
@@ -27,15 +26,21 @@ def readBar(image):
         if barcode.data in code:
             index = code.index(barcode.data)
             dif = code2[index] - time.time()
-           
+            if ((dif)<(-1*MinTime)):
+                file1.write(logIn)
+                file2.write(barcode.data)
+        else:
+            file1.write(logIn)
+            file2.write(barcode.data) 
         #if barcode.data in code and -dif <
-        #TODO write in if statment to compare difference of time and to check if barcode data is there before it writes data in
-        file2.write(barcode.data)
-
+        #DONE write in if statment to compare difference of time and to check if barcode data is there before it writes data in
+        
+        #TODO - comma seperated format
         print(barcode.data)
         print(barcode.type)
+        file1.close()
+        file2.close()
+    #cv2.imshow("Image", image)
 
-    cv2.imshow("Image", image)
-
-    cv2.waitkey(0)
-    cv2.destroyAllWindows()
+    #cv2.waitkey(0)
+    #cv2.destroyAllWindows()

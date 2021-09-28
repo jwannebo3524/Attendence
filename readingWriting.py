@@ -3,9 +3,10 @@ import cv2
 from pzbar.pzbar import decode
 import time
 
-path = "Temporary/Path/FixThis"
 def readBar(image):
-    global path
+    path = "Temporary/Path/FixThis"
+    MinTime = 60
+    
     dectectedBarcodes = decode(image)
     for barcode in dectectedBarcodes:
       #  (x, y, w, h) = barcode.rect                       -uncomment if displaying image

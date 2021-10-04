@@ -5,10 +5,10 @@ import time
 
 class ReadWrite:
     def __init__(self,path):
-    self.path = path  
-    self.sheet = self.getSheet()
-    self.Times = []
-    self.Barcodes = []
+        self.path = path  
+        self.sheet = self.getSheet()
+        self.Times = []
+        self.Barcodes = []
                     #"Temporary/Path/FixThis"
     self.MinTime = 60
     def readBar(self,image):
@@ -61,7 +61,7 @@ class ReadWrite:
 
     #cv2.waitkey(0)
     #cv2.destroyAllWindows()
-    def Close(self):
+    def close(self):
         self.setSheet(self.sheet)
     def getSheet(self):
         

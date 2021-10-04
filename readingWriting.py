@@ -3,45 +3,82 @@ import cv2
 from pzbar.pzbar import decode
 import time
 
-def readBar(image):
-    path = "Temporary/Path/FixThis"
-    MinTime = 60
+class ReadWrite:
+    def __init__(self,path):
+    self.path = path  
+    self.sheet = self.getSheet()
+    self.Times = []
+    self.Barcodes = []
+                    #"Temporary/Path/FixThis"
+    self.MinTime = 60
+    def readBar(self,image):
+        path = self.path
+        MinTime = self.MinTime
     
-    dectectedBarcodes = decode(image)
-    for barcode in dectectedBarcodes:
+        dectectedBarcodes = decode(image)
+        for barcode in dectectedBarcodes:
       #  (x, y, w, h) = barcode.rect                       -uncomment if displaying image
       #  cv2.rectangle(image, (x, y), (x + w, y + h), (255, 0, 0), 5)  
 
-        logIn = time.time()
-        file1 = open(path + "Times Logged", "r+")
-        code2 = file1.read().splitlines()
-        code2.reverse()
+            logIn = time.time()
+            
+            print(logIn)
+            print(barcode.data)
 
-
-        
-        print(logIn)
-        
-        file2 = open(path, "Barcodes", "r+")
-        code = file2.read().splitlines()
-        code.reverse()
-        if barcode.data in code:
-            index = code.index(barcode.data)
-            dif = code2[index] - time.time()
-            if ((dif)<(-1*MinTime)):
-                file1.write(logIn)
-                file2.write(barcode.data)
-        else:
-            file1.write(logIn)
-            file2.write(barcode.data) 
+            
+            if barcode.data in self.Barcodes:
+                self.Barcodes.reverse()
+                self.Times.reverse()
+                index = self.Barcodes.index(barcode.data)
+                dif = time.time()-self.Times[index]
+                self.Barcodes.reverse()
+                self.Times.reverse()
+                if ((dif)>(MinTime)):
+                    self.Times.append(logIn)
+                    self.Barcodes.append(barcode.data)
+                    Index = self.sheet[:][0].index(barcode.data)
+                    print('Welcome,'+self.sheet[Index][1])
+                    self.sheet[Index][3] = logIn
+                    if(self.sheet[Index][2] == -1):
+                        self.sheet[Index][2] = logIn
+                        
+            else:
+                self.Times.append(logIn)
+                self.Barcodes.append(barcode.data)
+                Index = self.sheet[:][0].index(barcode.data)
+                    print('Welcome,'+self.sheet[Index][1])
+                    self.sheet[Index][3] = logIn
+                    if(self.sheet[Index][2] == -1):
+                        self.sheet[Index][2] = logIn
         #if barcode.data in code and -dif <
         #DONE write in if statment to compare difference of time and to check if barcode data is there before it writes data in
         
         #TODO - comma seperated format
-        print(barcode.data)
-        print(barcode.type)
-        file1.close()
-        file2.close()
+           
+            print(barcode.type)
+            
     #cv2.imshow("Image", image)
 
     #cv2.waitkey(0)
     #cv2.destroyAllWindows()
+    def Close(self):
+        self.setSheet(self.sheet)
+    def getSheet(self):
+        
+        sheetFile = open(self.path+"Sheet","r")
+        rows = sheetFile.read().splitlines()
+        sheetFile.close()
+        sheet = []
+        c = 0
+        while(c<len(rows)):
+           sheet.append(rows[c].split(','))
+           c += 1
+    return sheet
+
+    def setSheet(self,sheet):
+       
+        sheetFile = open(self.path+"Sheet","w")
+        sheetFile.truncate(0)
+        sheetFile.write(sheet)
+        sheetFile.close()
+    

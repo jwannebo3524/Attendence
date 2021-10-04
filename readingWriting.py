@@ -9,12 +9,12 @@ class ReadWrite:
         self.sheet = self.getSheet()
         self.Times = []
         self.Barcodes = []
-        self.MinTime = MinTime
+        self.minTime = MinTime
                     #"Temporary/Path/FixThis"
-    self.MinTime = 60
+   # self.minTime = 60
     def readBar(self,image):
         path = self.path
-        MinTime = self.MinTime
+        MinTime = self.minTime
     
         dectectedBarcodes = decode(image)
         for barcode in dectectedBarcodes:

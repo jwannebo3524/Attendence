@@ -73,7 +73,7 @@ class ReadWrite:
         while(c<len(rows)):
            sheet.append(rows[c].split(','))
            c += 1
-    return sheet
+        return sheet
 
     def setSheet(self,sheet):
        

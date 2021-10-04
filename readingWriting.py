@@ -46,10 +46,10 @@ class ReadWrite:
                 self.Times.append(logIn)
                 self.Barcodes.append(barcode.data)
                 Index = self.sheet[:][0].index(barcode.data)
-                    print('Welcome,'+self.sheet[Index][1])
-                    self.sheet[Index][3] = logIn
-                    if(self.sheet[Index][2] == -1):
-                        self.sheet[Index][2] = logIn
+                print('Welcome,'+self.sheet[Index][1])
+                self.sheet[Index][3] = logIn
+                if(self.sheet[Index][2] == -1):
+                    self.sheet[Index][2] = logIn
         #if barcode.data in code and -dif <
         #DONE write in if statment to compare difference of time and to check if barcode data is there before it writes data in
         

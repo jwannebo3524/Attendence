@@ -1,6 +1,7 @@
 from tempfile import NamedTemporaryFile
 import shutil
 import csv
+import time
 
 filename = 'tmpEmployeeDatabase.csv'
 tempfile = NamedTemporaryFile('w+t', newline='', delete=False)

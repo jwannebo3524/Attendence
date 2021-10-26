@@ -1,4 +1,3 @@
-
 import cv2
 from pzbar.pzbar import decode
 import time
@@ -12,29 +11,29 @@ class ReadWrite:
         self.minTime = MinTime
                     #"Temporary/Path/FixThis"
    # self.minTime = 60
-    def readBar(self,image):
-        path = self.path
-        MinTime = self.minTime
+    def readBar(self,image):    #gets image bar code
+        path = self.path            
+        MinTime = self.minTime      
     
-        dectectedBarcodes = decode(image)
+        dectectedBarcodes = decode(image)  #all barcodes in image
         for barcode in dectectedBarcodes:
       #  (x, y, w, h) = barcode.rect                       -uncomment if displaying image
       #  cv2.rectangle(image, (x, y), (x + w, y + h), (255, 0, 0), 5)  
 
-            logIn = time.time()
+            logIn = time.time()   #logs the time detected 
             
             print(logIn)
             print(barcode.data)
 
             
-            if barcode.data in self.Barcodes:
-                self.Barcodes.reverse()
+            if barcode.data in self.Barcodes:   #has bar code been checked in
+                self.Barcodes.reverse()         #most recent Log In
                 self.Times.reverse()
-                index = self.Barcodes.index(barcode.data)
+                index = self.Barcodes.index(barcode.data)   
                 dif = time.time()-self.Times[index]
                 self.Barcodes.reverse()
                 self.Times.reverse()
-                if ((dif)>(MinTime)):
+                if ((dif)>(MinTime)):           #has min log in time been reached
                     self.Times.append(logIn)
                     self.Barcodes.append(barcode.data)
                     Index = self.sheet[:][0].index(barcode.data)
@@ -82,4 +81,7 @@ class ReadWrite:
         sheetFile.truncate(0)
         sheetFile.write(sheet)
         sheetFile.close()
+
+
+
     

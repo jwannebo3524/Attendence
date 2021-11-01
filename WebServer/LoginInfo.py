@@ -23,7 +23,7 @@ class LoginInfo:
         cidsFile = open(path+"Cids.txt","r+")  #UserID of corresponding certificate
         Cids = cidsFile.read().splitlines()
 
-    #Detirmine permissions 
+    #Determine permissions 
         Status = "None"
         UserID = 0
         Certificate = request.cookies.get('Certificate')

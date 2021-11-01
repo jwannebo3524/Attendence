@@ -1,8 +1,9 @@
 When you use a library, add it to the list
 Libraries in use:
 pyzbar
-time
+time (included with python)
 picamera
 numpy
 flask
 secret   (included with python)
+datetime (included with python)

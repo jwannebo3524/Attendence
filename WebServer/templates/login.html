@@ -1,11 +1,23 @@
 <html>
   <head>
     <title>Attendence Login</title>
-    <link rel = "stylesheet" type = "text/css" href = "Style.css">
+    <meta content="width=device-width, initial-scale=1" name="viewport" />
+    <link rel="stylesheet" href="style.css"/>
   </head>
   <body>
-      <h1>Login</h1>
-      <br>
+	<h1 class = "header">Attendence System</h1>
+
+     	<div class = "navbar">
+	<a href = "home.html"><button class = "selected">Home</button></a>
+	<a href = "logout.html"><button>log out</button></a>
+	<a href = "logout.html"><button>Something here</button></a>
+	<a href = "logout.html"><button>Also here</button></a>
+	</div>
+
+	<div class = "info">
+	
+	<h1 class = "sectionHeader">Login</h1>
+	
       <form action="" method="post">
         <input type="text" placeholder="Username" name="Username" value="{{
           request.form.Username }}">
@@ -16,6 +28,7 @@
       {% if message %}
         <h2> {{ message }}</h2>
       {% endif %}
-	
+
+	</div>
   </body>
 </html>

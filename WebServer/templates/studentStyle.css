@@ -1,0 +1,51 @@
+.header {
+    font-size: 3em;
+	padding-top: 2px;
+	height: 30px;
+	text-align: center;
+	max-width: 100vw;
+    color: darkblue;
+    min-height: 60px;
+    background-color: lightblue;
+    border-radius: 10px;
+} 
+
+button {
+    border-color: darkblue;
+    border-radius: 5px;
+    text-align: center;
+    background-color: lightblue;
+    color: darkblue;
+    min-width: 100px;
+    min-height: 60px;
+    float:left;
+    margin-left: 50px;
+}
+
+.navbar button:hover {
+    background-color: darkcyan;
+}
+
+.navbar {
+    width: 375px;
+    margin: auto;
+    padding:20px;
+    margin-bottom: 50px;
+}
+
+.tab {
+
+}
+
+table {
+    border-radius: 10px;
+    margin:auto;
+    min-width:300px;
+    padding: 10px;
+    background-color: darkblue;
+}
+
+th {
+    min-width: 75px;
+    background-color:lightblue;
+}

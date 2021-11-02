@@ -16,9 +16,20 @@ class ReadWrite:
         self.minTime = MinTime
                     #"Temporary/Path/FixThis"
    # self.minTime = 60
+    def daysFile():
+        filename = "" + str(datetime.date().month) + str(datetime.date().day) + str((datetime.date().year) - 2000) + "-WildStang_Attendance.csv"
+        daysFile = open(filename,"r")
+        if (daysFile != ""):
+            return "SHIT IDK \_('_')_/"
+        daysFile.close()
+        daysFile = open(filename, "a")
+        baseFile = open("Base_Attendance.txt","r")
+        daysFile.write(baseFile.read())
+
+
     def readBar(self,image):    #gets image bar code
         global editIndexes
-        path = self.path            
+        path = self.path           
         MinTime = self.minTime      
     
         dectectedBarcodes = decode(image)  #all barcodes in image
@@ -80,8 +91,6 @@ class ReadWrite:
         sheet = []
         c = 0
         while(c<len(rows)):
-            #if (str(c) in rows)
-                #sheet.append(rows[c].split(','))
             sheet.append(rows[c].split(','))
         
             c += 1
@@ -90,9 +99,6 @@ class ReadWrite:
 
     def setSheet(self,sheet):
         global rows
-        #global editIndexes
-        #tempList = []
-        #self.organizeIndexes()
         rows = [] 
         for j in self.sheet:
                 rows[j] = self.sheet[j]
@@ -101,12 +107,7 @@ class ReadWrite:
         sheetFile.truncate(0)
         for j in rows:
             sheetFile.write(str(self.sheet[j])[1:(len(rows[j])-1)]) 
-            #if (j != editIndexes[0,0]):
-                #tempList = rows[j].split(',')
-                #if ()
-            #sheetFile.write(rows[j])
             
-        #editIndexes = []
         sheetFile.close()
 
     #def organizeIndexes():

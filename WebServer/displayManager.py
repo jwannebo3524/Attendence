@@ -127,7 +127,7 @@ class InfoManager:
         full.append("</table>")
         return full
                     
-    def AdminOverride(self,override,date,number,Out = True`):
+    def AdminOverride(self,override,date,number,Out = True):
         FileList = listdir(self.Path)
         if(str(date)+"-wildstang_attendance" in FileList):
             today = self.getSheet(files[FileList.index(str(date)+"-wildstangattendance")])

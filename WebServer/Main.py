@@ -72,24 +72,18 @@ def Home():
     if(Status == "Admin"):
         Info = dm.InfoManager(path)
         if(request.method == 'POST'):
-            response = make_response(render_template('AdminHome.html'),head = "In Development")
+            response = make_response(redirect(url_for('Home')))
             if(request.form['A']):
-                response = make_response(redirect(url_for('Home')))
                 response.set_cookie('Disp','absent')
             if(request.form['P']):
-                response = make_response(redirect(url_for('Home')))
                 response.set_cookie('Disp','present')
             if(request.form['C']):
-                response = make_response(redirect(url_for('Home')))
                 response.set_cookie('Disp','checked out')
             if(request.form['UserSearch']):
-                response = make_response(redirect(url_for('Home')))
                 response.set_cookie('User',request.form['IDnumber'])
             if(request.form['Session']):
-                response = make_response(redirect(url_for('Home')))
                 response.set_cookie('From',request.form['Session'])
             if(request.form['Clear']):
-                response = make_response(redirect(url_for('Home')))
                 response.set_cookie('Disp','null',max_age = 0)
                 response.set_cookie('User','null',max_age = 0)
                 response.set_cookie('From','null',max_age = 0)
@@ -110,7 +104,7 @@ def Home():
             if(request.cookies.get('User')):
                 if(request.cookies.get('User') >= 0):
                     uTab,UserTime,first,last = Info.GetUserData(request.cookies.get('User'))
-                    response = make_response(render_template('AdminHome.html'),table = Ctab,head=str(first)+" "+str(last))
+                    response = make_response(render_template('AdminHome.html'),table = uTab,head=str(first)+" "+str(last))
             else:     
                 if(request.cookies.get('From')):   
                     Ftab,Atab,Ptab,Ctab,headdate = Info.GetSummary(request.cookies.get('Session'))

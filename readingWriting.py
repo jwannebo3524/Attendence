@@ -46,7 +46,7 @@ class ReadWrite:
             if barcode.data in self.Barcodes:   #has bar code been checked in
                 self.Barcodes.reverse()         #most recent Log In
                 self.Times.reverse()
-                Index = self.Barcodes.index(barcode.data)   
+                index = self.Barcodes.index(barcode.data)   
                 dif = time.time()-self.Times[index]
                 self.Barcodes.reverse()
                 self.Times.reverse()

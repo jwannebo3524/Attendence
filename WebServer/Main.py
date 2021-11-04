@@ -62,10 +62,22 @@ def Home():
     if(Status == "None"):
         response = make_response(render_template('Error.html'))
     if(Status == "Student"):
+        message = ""
         Info = dm.InfoManager(path)
-
-        uTab,UserTime,first,last = Info.GetUserData(UserID)
-        response = make_response(render_template('StudentHome.html'))
+        uTab,UserTime,first,last,IsHere = Info.GetUserData(UserID)
+        if(request.methos == 'POST'):
+            if(request.form['CheckIn']):
+                if(not IsHere):
+                    nothing = Info.AdminOverride(CurrentTime,CurrentDate,UserID,Out = False)
+                else:
+                    message = "You are already checked in."
+            elif(request.form['CheckOut']):
+                if(IsHere):
+                    nothing = Info.AdminOverride(CurrentTime,CurrentDate,UserID,Out = True)
+                else:
+                    message = "You are not currently checked in, so you may not check out."
+        response = make_response(render_template('StudentHome.html'),table = uTab,name = str(first)+str(last),message = message)
+                            
         
         Certificate = LoginInfo.WriteCertificate(path,UserID)       #new certificate
         response.set_cookie('Certificate',Certificate)

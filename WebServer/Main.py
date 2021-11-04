@@ -66,6 +66,8 @@ def Home():
         Info = dm.InfoManager(path)
         uTab,UserTime,first,last,IsHere = Info.GetUserData(UserID)
         if(request.methos == 'POST'):
+            CurrentTime = 0 #FIXTHIS- what convention are we using for time??? just relized previous time in code is still not human readable, never fixed that.
+            CurrentDate = str(datetime.date.month)+str(datetime.date.day)
             if(request.form['CheckIn']):
                 if(not IsHere):
                     nothing = Info.AdminOverride(CurrentTime,CurrentDate,UserID,Out = False)

@@ -8,9 +8,9 @@ rows = []
 editIndexes = [[],[]] # [[index of the sign in],[]]
 
 class ReadWrite:
-    def __init__(self):
-        MinTime = 60
-        path = str(datetime.date().month) + str(datetime.date().day) + str((datetime.date().year) - 2000) + "-WildStang_Attendance.csv"
+    def __init__(self,path,MinTime):
+       # MinTime = 60
+       # path = str(datetime.date().month) + str(datetime.date().day) + str((datetime.date().year) - 2000) + "-WildStang_Attendance.csv"
         self.path = path  
         self.sheet = self.getSheet()
         self.Times = []

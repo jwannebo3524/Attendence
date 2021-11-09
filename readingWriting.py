@@ -106,7 +106,7 @@ class ReadWrite:
         sheetFile = open(self.path+"Sheet","a")
         sheetFile.truncate(0)
         for j in rows:
-            sheetFile.write(str(self.sheet[j])[1:(len(rows[j])-1)]) 
+            sheetFile.write(str(self.sheet[j])[1:(len(rows[j])-1)]+"\n") 
             
         sheetFile.close()
     

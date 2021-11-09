@@ -109,7 +109,11 @@ class ReadWrite:
             sheetFile.write(str(self.sheet[j])[1:(len(rows[j])-1)]) 
             
         sheetFile.close()
-
+    
+    def write(self,s): #wrapper
+        self.readBar(s)
+        
+        
     #def organizeIndexes():
     #    global editIndexes
     #    tempMatrix = []

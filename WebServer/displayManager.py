@@ -137,7 +137,7 @@ class InfoManager:
             return False
         Index = today[:][0].index(number)
         today[Index][3+Out] = override
-        setSheet(today,str(date)+"-wildstang_attendance")
+        self.setSheet(today,str(date)+"-wildstang_attendance")
         return True
    
     def getSheet(self):

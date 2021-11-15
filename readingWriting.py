@@ -3,6 +3,7 @@ import cv2
 from pzbar.pzbar import decode
 import time
 import numpy as np
+import datetime
 
 rows = []
 editIndexes = [[],[]] # [[index of the sign in],[]]

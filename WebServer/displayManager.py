@@ -87,6 +87,7 @@ class InfoManager:
         return today[:][0]
     def GetTotalMatrix(self):
         files = [f for f in listdir(self.Path) if isfile(join(self.Path, f))]
+        days = []
         c = 0
         while(c<len(files)):
             days.append(self.getSheet(files[c])) #open all the files and matrix!
@@ -130,6 +131,7 @@ class InfoManager:
     def AdminOverride(self,override,date,number,Out = True):
         FileList = listdir(self.Path)
         if(str(date)+"-wildstang_attendance" in FileList):
+            files = [f for f in listdir(self.Path) if isfile(join(self.Path, f))]
             today = self.getSheet(files[FileList.index(str(date)+"-wildstangattendance")])
         else:
             return False

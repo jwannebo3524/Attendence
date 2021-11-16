@@ -1,7 +1,9 @@
 import secrets
+import datetime
 import time
 from flask import Flask, render_template, redirect, url_for, request, make_response
 from LoginInfo import LoginInfo
+import displayManager as dm
 path = "C:/Users/132/Desktop/WebServer/" #Change this if not me
 
 app = Flask(__name__,template_folder= path+"templates")
@@ -60,10 +62,24 @@ def Home():
     if(Status == "None"):
         response = make_response(render_template('Error.html'))
     if(Status == "Student"):
+        message = ""
         Info = dm.InfoManager(path)
-
-        uTab,UserTime,first,last = Info.GetUserData(UserID)
-        response = make_response(render_template('StudentHome.html'))
+        uTab,UserTime,first,last,IsHere = Info.GetUserData(UserID)
+        if(request.methos == 'POST'):
+            CurrentTime = 0 #FIXTHIS- what convention are we using for time??? just relized previous time in code is still not human readable, never fixed that.
+            CurrentDate = str(datetime.date.month)+str(datetime.date.day)
+            if(request.form['CheckIn']):
+                if(not IsHere):
+                    nothing = Info.AdminOverride(CurrentTime,CurrentDate,UserID,Out = False)
+                else:
+                    message = "You are already checked in."
+            elif(request.form['CheckOut']):
+                if(IsHere):
+                    nothing = Info.AdminOverride(CurrentTime,CurrentDate,UserID,Out = True)
+                else:
+                    message = "You are not currently checked in, so you may not check out."
+        response = make_response(render_template('StudentHome.html'),table = uTab,name = str(first)+str(last),message = message)
+                            
         
         Certificate = LoginInfo.WriteCertificate(path,UserID)       #new certificate
         response.set_cookie('Certificate',Certificate)
@@ -71,51 +87,63 @@ def Home():
     if(Status == "Admin"):
         Info = dm.InfoManager(path)
         if(request.method == 'POST'):
-            response = make_response(render_template('AdminReload.html'))
+            response = make_response(redirect(url_for('Home')))
             if(request.form['A']):
                 response.set_cookie('Disp','absent')
             if(request.form['P']):
                 response.set_cookie('Disp','present')
             if(request.form['C']):
                 response.set_cookie('Disp','checked out')
-            response.set_cookie('User',request.form['IDnumber'])
-            response.set_cookie('Session',request.form['Session'])
+            if(request.form['UserSearch']):
+                response.set_cookie('User',request.form['IDnumber'])
             if(request.form['Session']):
                 response.set_cookie('From',request.form['Session'])
-            else:
-                response.set_cookie('From',1)
+            if(request.form['Clear']):
+                response.set_cookie('Disp','null',max_age = 0)
+                response.set_cookie('User','null',max_age = 0)
+                response.set_cookie('From','null',max_age = 0)
+                
+            Ids = Info.getIds()       
+            c = 0
+            while(c<len(Ids)):
+                if(request.form['Edit'+str(Ids[c])]):
+                    response = make_response(redirect(url_for('Home')))
+                    date = request.cookies.get('Session')
+                    checkIn = request.form['CheckIn'+str(Ids[c])]
+                    checkOut = request.form['CheckOut'+str(Ids[c])]
+                    nothing = Info.AdminOverride(checkOut,date,Ids[c],Out = True)
+                    nothing = Info.AdminOverride(checkIn,date,Ids[c],Out = False)
+                c += 1
+
         else:
-            if(response.cookies.get('User')):
-                if(response.cookies.get('User') >= 0):
+            if(request.cookies.get('User')):
+                if(request.cookies.get('User') >= 0):
                     uTab,UserTime,first,last = Info.GetUserData(request.cookies.get('User'))
-                    response = make_response(render_template('AdminHome.html'),table = Ctab,head=str(first)+" "+str(last))
+                    response = make_response(render_template('AdminHome.html'),table = uTab,head=str(first)+" "+str(last))
             else:     
                 if(request.cookies.get('From')):   
-                    Ftab,Atab,Ptab,Ctab = Info.GetSummary(request.cookies.get('Session'))
+                    Ftab,Atab,Ptab,Ctab,headdate = Info.GetSummary(request.cookies.get('Session'))
                 else:
-                    Ftab,Atab,Ptab,Ctab = Info.GetSummary(1)
+                    Ftab,Atab,Ptab,Ctab,headdate = Info.GetSummary(str(datetime.date.month)+str(datetime.date.day))
                 if(request.cookies.get('Disp')):
                     q = request.cookies.get('Disp')
-                    3if(q == "absent"):
-                        response = make_response(render_template('AdminHome.html'),table = Atab,head="Absent")
+                    if(q == "absent"):
+                        response = make_response(render_template('AdminHome.html'),table = Atab,head="Absent "+headdate)
                     elif(q == "present"):
-                        response = make_response(render_template('AdminHome.html'),table = Ptab,head="Currently Present")
+                        response = make_response(render_template('AdminHome.html'),table = Ptab,head="Currently Present "+headdate)
                     elif(q == "checked out"):
-                        response = make_response(render_template('AdminHome.html'),table = Ctab,head="Checked Out")
+                        response = make_response(render_template('AdminHome.html'),table = Ctab,head="Checked Out "+headdate)
                     elif(q == "user"):
                         none = Info.GetTotalMatrix()
                         uTab,UserTime,first,last = Info.GetUserData(request.cookies.get('User'))
                         response = make_response(render_template('AdminHome.html'),table = Ctab,head=str(first)+" "+str(last))               
                 else:
-                    response = make_response(render_template('AdminHome.html'),table = Ftab)
+                    response = make_response(render_template('AdminHome.html'),table = Ftab,head=headdate)
 
-        response = make_response(render_template('AdminHome.html'),head = "In Development")
-    
+        
         Certificate = LoginInfo.WriteCertificate(path,UserID)       #new certificate
         response.set_cookie('Certificate',Certificate)
     return response
 
-
-    
 
     

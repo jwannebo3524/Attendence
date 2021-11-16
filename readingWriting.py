@@ -1,6 +1,11 @@
+from os import O_LARGEFILE
 import cv2
 from pzbar.pzbar import decode
 import time
+import numpy as np
+
+rows = []
+editIndexes = [[],[]] # [[index of the sign in],[]]
 
 class ReadWrite:
     def __init__(self,path,MinTime):
@@ -11,8 +16,20 @@ class ReadWrite:
         self.minTime = MinTime
                     #"Temporary/Path/FixThis"
    # self.minTime = 60
+    def daysFile():
+        filename = "" + str(datetime.date().month) + str(datetime.date().day) + str((datetime.date().year) - 2000) + "-WildStang_Attendance.csv"
+        daysFile = open(filename,"r")
+        if (daysFile != ""):
+            return "SHIT IDK \_('_')_/"
+        daysFile.close()
+        daysFile = open(filename, "a")
+        baseFile = open("Base_Attendance.txt","r")
+        daysFile.write(baseFile.read())
+
+
     def readBar(self,image):    #gets image bar code
-        path = self.path            
+        global editIndexes
+        path = self.path           
         MinTime = self.minTime      
     
         dectectedBarcodes = decode(image)  #all barcodes in image
@@ -36,24 +53,27 @@ class ReadWrite:
                 if ((dif)>(MinTime)):           #has min log in time been reached
                     self.Times.append(logIn)
                     self.Barcodes.append(barcode.data)
-                    Index = self.sheet[:][0].index(barcode.data)
-                    print('Welcome,'+self.sheet[Index][1])
-                    self.sheet[Index][3] = logIn
-                    if(self.sheet[Index][2] == -1):
-                        self.sheet[Index][2] = logIn
+                    index = self.sheet[:][0].index(barcode.data)
+                    editIndexes.append([index,logIn]) #logs the activity
+                    print('Welcome,'+self.sheet[index][1])
+                    self.sheet[index][3] = logIn
+                    if(self.sheet[index][2] == -1):
+                        
+                        self.sheet[index][2] = logIn
                         
             else:
                 self.Times.append(logIn)
                 self.Barcodes.append(barcode.data)
-                Index = self.sheet[:][0].index(barcode.data)
-                print('Welcome,'+self.sheet[Index][1])
-                self.sheet[Index][3] = logIn
-                if(self.sheet[Index][2] == -1):
-                    self.sheet[Index][2] = logIn
+                index = self.sheet[:][0].index(barcode.data)
+                print('Welcome,'+self.sheet[index][1])
+                self.sheet[index][3] = logIn
+                editIndexes.append([index,logIn]) #logs the activity
+                if(self.sheet[index][2] == -1):
+                    self.sheet[index][2] = logIn
         #if barcode.data in code and -dif <
         #DONE write in if statment to compare difference of time and to check if barcode data is there before it writes data in
         
-        #TODO - comma seperated format
+        #TODO - comma seperated format   guess not
            
             print(barcode.type)
             
@@ -64,23 +84,51 @@ class ReadWrite:
     def close(self):
         self.setSheet(self.sheet)
     def getSheet(self):
-        
+        global rows
         sheetFile = open(self.path+"Sheet","r")
         rows = sheetFile.read().splitlines()
         sheetFile.close()
         sheet = []
         c = 0
         while(c<len(rows)):
-           sheet.append(rows[c].split(','))
-           c += 1
+            sheet.append(rows[c].split(','))
+        
+            c += 1
+
         return sheet
 
     def setSheet(self,sheet):
-       
-        sheetFile = open(self.path+"Sheet","w")
+        global rows
+        rows = [] 
+        for j in self.sheet:
+                rows[j] = self.sheet[j]
+
+        sheetFile = open(self.path+"Sheet","a")
         sheetFile.truncate(0)
-        sheetFile.write(sheet)
+        for j in rows:
+            sheetFile.write(str(self.sheet[j])[1:(len(rows[j])-1)]) 
+            
         sheetFile.close()
+
+    #def organizeIndexes():
+    #    global editIndexes
+    #    tempMatrix = []
+    #    tempIndex = int
+
+    #    for i in editIndexes:
+    #        inserted = False
+    #        tempIndex = editIndexes[[i][0]]
+    #        for j in tempMatrix:
+    #            if (tempMatrix[[j][0]] < tempIndex & inserted == False):
+    #                tempMatrix.insert(j, editIndexes[i])
+    #                inserted = True
+    #        if (inserted == False):
+    #            tempMatrix.appened(editIndexes[i])
+    #    editIndexes = [[],[]]
+    #    editIndexes = tempMatrix
+        
+
+
 
 
 

@@ -49,44 +49,16 @@ class InfoManager:
             c += 1
             full.append("</tr>")
         full.append("</table>")
-        c = 0
-        while(c<len(absent)):
-            aTable.append("<tr>")
-            i = absent[c]
-            c2 = 1
-            while(c2<len(today[i])):
-                aTable.append("<td>"+today[i][c2]+"</td>")
-                c2 += 1
-            aTable.append("</tr>")
-            c += 1
-        aTable.append("</table>")
-        c = 0
-        while(c<len(present)):
-            pTable.append("<tr>")
-            i = present[c]
-            c2 = 1
-            while(c2<len(today[i])):
-                pTable.append("<td>"+today[i][c2]+"</td>")
-                c2 += 1
-            pTable.append("</tr>")
-            c += 1
-        pTable.append("</table>")
-        while(c<len(checkedout)):
-            cTable.append("<tr>")
-            i = checkedout[c]
-            c2 = 1
-            while(c2<len(today[i])):
-                cTable.append("<td>"+today[i][c2]+"</td>")
-                c2 += 1
-            cTable.append("</tr>")
-            c += 1
-        cTable.append("</table>")
-        return full,aTable,pTable,cTable,date
+        atable = self.GenerateTable(absent)
+        ptable = self.GenerateTable(present)
+        ctable = self.GenerateTable(checkedout)
+        return Table,date
     def GetIds(self):
         today = self.getSheet(str(datetime.date.month)+str(datetime.date.day)+"-wildstang_attendance")
         return today[:][0]
     def GetTotalMatrix(self):
         files = [f for f in listdir(self.Path) if isfile(join(self.Path, f))]
+        days = []
         c = 0
         while(c<len(files)):
             days.append(self.getSheet(files[c])) #open all the files and matrix!
@@ -130,17 +102,17 @@ class InfoManager:
     def AdminOverride(self,override,date,number,Out = True):
         FileList = listdir(self.Path)
         if(str(date)+"-wildstang_attendance" in FileList):
+            files = [f for f in listdir(self.Path) if isfile(join(self.Path, f))]
             today = self.getSheet(files[FileList.index(str(date)+"-wildstangattendance")])
         else:
             return False
         Index = today[:][0].index(number)
         today[Index][3+Out] = override
-        setSheet(today,str(date)+"-wildstang_attendance")
+        self.setSheet(today,str(date)+"-wildstang_attendance")
         return True
    
-    def getSheet(self):
-        global rows
-        sheetFile = open(self.path+"Sheet","r")
+    def getSheet(self,file):
+        sheetFile = open(file,"r")
         rows = sheetFile.read().splitlines()
         sheetFile.close()
         sheet = []
@@ -154,19 +126,18 @@ class InfoManager:
 
         return sheet
 
-    def setSheet(self,sheet):
-        global rows
+    def setSheet(self,sheet,file):
         #global editIndexes
         #tempList = []
         #self.organizeIndexes()
         rows = [] 
-        for j in self.sheet:
+        for j in sheet:
                 rows[j] = self.sheet[j]
 
-        sheetFile = open(self.path+"Sheet","a")
-        sheetFile.truncate(0)
+        sheetFile = open(file,"w")
+        sheetFile.truncate(0) #may not be needed
         for j in rows:
-            sheetFile.write(str(self.sheet[j])[1:(len(rows[j])-1)]) 
+            sheetFile.write(str(sheet[j])[1:(len(rows[j])-1)]) 
             #if (j != editIndexes[0,0]):
                 #tempList = rows[j].split(',')
                 #if ()
@@ -174,4 +145,22 @@ class InfoManager:
             
         #editIndexes = []
         sheetFile.close()
-        
+    def GenerateTable(self,matrix,header ="""<table>
+          <tr>
+        <th>Fisrt Name</th>
+        <th>Last Name</th>
+        <th>Check In</th>
+        <th>Check Out</th>
+          </tr>""" ):
+        out = header
+        while(c<len(matrix)): #generate summary tables
+            out.append("<tr>")
+            c2 = 1 #b/c 0 is the number 
+            while(c2<len(matrix[c])):
+                out.append("<td>"+matrix[c][c2]+"</td>")
+                c2 += 1
+            c += 1
+            out.append("</tr>")
+            
+        out.append("</table>")
+        return out

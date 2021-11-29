@@ -7,3 +7,4 @@ numpy
 flask
 secret   (included with python)
 datetime (included with python)
+keyboard

@@ -1,14 +1,19 @@
 import Imageifier as im
 import readingWriting as rw
 import datetime
-TodayPath = str(datetime.date.month)+str(datetime.date.day)+"-wildstang_attendance"
-i = im.Imigeifier('null')
+
+PREVIEW = False
+
+today = datetime.date.today()
+TodayPath = "" + str(today.month) + str(today.day) + str(int(today.year) - 2000) + "-WildStang_Attendance.csv"
+i = im.Imageifier('null',preveiw = PREVIEW)
 e = im.Exit()
 readwrite = rw.ReadWrite(TodayPath,60)
-readwrite.getSheet()
+#readwrite.getSheet()
 readwrite.daysFile()
 while True:
-    i.VideoLoop(readwrite,i)
+    i.ImageLoop(readwrite,e)
     print("autosaving. blink LED or something")
     readwrite.setSheet(readwrite.sheet)
     print("autosave complete")
+

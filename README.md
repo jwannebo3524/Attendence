@@ -26,7 +26,7 @@
 [![Issues][issues-shield]][issues-url]
 [![MIT License][license-shield]][license-url]
 [![LinkedIn][linkedin-shield]][linkedin-url]
-
+[![attendance application](https://github.com/jwannebo3524/Attendence/actions/workflows/python-app.yml/badge.svg)](https://github.com/jwannebo3524/Attendence/actions/workflows/python-app.yml)
 
 
 <!-- PROJECT LOGO -->

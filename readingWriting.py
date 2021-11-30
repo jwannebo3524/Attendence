@@ -22,9 +22,8 @@ class ReadWrite:
         self.minTime = MinTime
                     #"Temporary/Path/FixThis"
    # self.minTime = 60
-    def daysFile(self):
-        today = datetime.date.today() 
-        filename = "" + str(today.month) + str(today.day) + str(int(today.year) - 2000) + "-WildStang_Attendance.csv"
+    def daysFile():
+        filename = "D:/"+str(datetime.date().month)+str(datetime.date().day)+str((datetime.date().year)-2000)+"-WildStang_Attendance.csv"
         daysFile = open(filename,"r")
         if (daysFile != ""):
             return "SHIT IDK \_('_')_/"

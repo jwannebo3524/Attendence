@@ -11,22 +11,16 @@ class InfoManager:
         files = [f for f in listdir(self.Path) if isfile(join(self.Path, f))]
         FileList = listdir(self.Path)
         if(date == "null"):
-            today = self.getSheet(str(datetime.date.month)+str(datetime.date.day)+"-wildstang_attendance")
-            date = str(datetime.date.month)+'/'+str(datetime.date.day)
+            today = self.getSheet(str(datetime.date().month)+str(datetime.date().day)+"-wildstang_attendance")
+            date = str(datetime.date().month)+'/'+str(datetime.date().day)
         else:
             if(str(date)+"-wildstang_attendance" in FileList):
                 today = self.getSheet(FileList[(str(date)+"-wildstangattendance")])
                 date = date[0:2]+'/'+date[2:]
             else:
-                today = self.getSheet(str(datetime.date.month)+str(datetime.date.day)+"-wildstang_attendance")
-                date = str(datetime.date.month)+'/'+str(datetime.date.day)
-        full = """<table>
-          <tr>
-        <th>Fisrt Name</th>
-        <th>Last Name</th>
-        <th>Check In</th>
-        <th>Check Out</th>
-          </tr>"""
+                today = self.getSheet(str(datetime.date().month)+str(datetime.date().day)+"-wildstang_attendance")
+                date = str(datetime.date().month)+'/'+str(datetime.date().day)
+        full = "<table>"
         aTable = full
         pTable = full
         cTable = full
@@ -55,7 +49,7 @@ class InfoManager:
         return Table,date
     def GetIds(self):
         today = self.getSheet(str(datetime.date.month)+str(datetime.date.day)+"-wildstang_attendance")
-        return today[:][0]
+        return np.array(today[:,0]).tolist()
     def GetTotalMatrix(self):
         files = [f for f in listdir(self.Path) if isfile(join(self.Path, f))]
         days = []
@@ -63,19 +57,21 @@ class InfoManager:
         while(c<len(files)):
             days.append(self.getSheet(files[c])) #open all the files and matrix!
             c += 1
-        self.Total = days
+        self.Total = np.array(days)
         return days
     def GetUserData(self,num):
         if(len(self.Total)<1):
             null = self.GetTotalMatrix()
         UserData = []
-        Total = 0
+        Total = datetime.timedelta()
         c = 0
         while(c<len(self.Total)):
-            if(num in self.Total[:][0]):
-                z = self.Total[:][0].index(num)
+            if(num in self.Total[:,0]):
+                z = self.Total[:,0].tolist().index(num)
                 UserData.append(self.Total[z])
-                Total += self.Total[z][4]-self.Total[z][3]
+                ExitTime = datetime.timedelta(hours = self.Total[z][4][0:2],minutes = self.Total[z][4][3:5])
+                EnterTime = datetime.timedelta(hours = self.Total[z][3][0:2],minutes = self.Total[z][3][3:5])
+                Total += ExitTime-EnterTime
             c += 1
         return UserData,Total,UserData[0][1],UserData[0][2]
     def UserSummary(self,num):
@@ -106,7 +102,9 @@ class InfoManager:
             today = self.getSheet(files[FileList.index(str(date)+"-wildstangattendance")])
         else:
             return False
-        Index = today[:][0].index(number)
+        today = np.array(today)
+        Index = today[:,0].tolist().index(number)
+        today = today.tolist()
         today[Index][3+Out] = override
         self.setSheet(today,str(date)+"-wildstang_attendance")
         return True
@@ -145,14 +143,9 @@ class InfoManager:
             
         #editIndexes = []
         sheetFile.close()
-    def GenerateTable(self,matrix,header ="""<table>
-          <tr>
-        <th>Fisrt Name</th>
-        <th>Last Name</th>
-        <th>Check In</th>
-        <th>Check Out</th>
-          </tr>""" ):
-        out = header
+    def GenerateTable(self,matrix):
+        c = 0
+        out = "<table>"
         while(c<len(matrix)): #generate summary tables
             out.append("<tr>")
             c2 = 1 #b/c 0 is the number 

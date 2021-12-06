@@ -4,6 +4,7 @@ import time
 from flask import Flask, render_template, redirect, url_for, request, make_response
 from LoginInfo import LoginInfo
 import displayManager as dm
+import numpy as np
 path = "C:/Users/132/Desktop/WebServer/" #Change this if not me
 
 app = Flask(__name__,template_folder= path+"templates")
@@ -22,30 +23,47 @@ def Login():
     if request.method == 'POST':
 
         message = ''
-        fileObj = open(path+"Usernames.txt", "r")
-        Usernames = fileObj.read().splitlines()
-        fileObj.close()
+       # fileObj = open(path+"Usernames.txt", "r")
+        #Usernames = fileObj.read().splitlines()
+        #fileObj.close()
     
-        fileObj = open(path+"Passwords.txt", "r") 
-        Passwords = fileObj.read().splitlines()
+        fileObj = open(path+"LoginData.txt", "r") 
+        LoginData = fileObj.read().splitlines()
         fileObj.close()
-           
-
-        if request.form['Username'] in Usernames:
-            UserID = Usernames.index(request.form['Username'])
-            if request.form['Password'] == Passwords[UserID]:   
-                message = 'Login successful. Something should happen now'
-                out = render_template('login.html',message = message)
-                response = make_response(redirect(url_for('Home')))
-                Certificate = LoginInfo.WriteCertificate(path,UserID)
-                response.set_cookie('Certificate',Certificate)
-                out = response
-                
+        sheet = []
+        c = 0
+        while(c<len(LoginData)):
+            sheet.append(LoginData[c].split(','))
+            c += 1
+        #
+        
+        InfoSheet = np.array(sheet)
+        #if request.form['Username'] in Usernames:
+          #  UserID = Usernames.index(request.form['Username'])
+          #  if request.form['Password'] == Passwords[UserID]:   
+             #   message = 'Login successful. Something should happen now'
+            ##    out = render_template('login.html',message = message)
+              #  response = make_response(redirect(url_for('Home')))
+             #   Certificate = LoginInfo.WriteCertificate(path,UserID)
+              #  response.set_cookie('Certificate',Certificate)
+              #  out = response
+        if(request.form['Email'] in InfoSheet[:,0]):
+            z = today[:,0].tolist().index(request.form['Email'])
+            if(request.form['First'] == today[:,1]):
+                if(request.form['Last'] == today[:,2]):
+                    message = 'Login Succsesful'
+                    response = make_response(redirect(url_for('Home')))
+                    Certificate = LoginInfo.WriteCertificate(path,UserID)
+                    response.set_cookie('Certificate',Certificate)
+                    out = response
+                else:
+                    message = 'Typo?'
+                    out = render_template('login.html',message = message)    
             else:
-                message = 'Invalid Password'
+                message = 'Typo?'
                 out = render_template('login.html',message = message)
         else:
-            message = 'No.'
+            message = 'Email not recognized.'
             out = render_template('login.html',message = message)
     else:
         message = None
@@ -66,7 +84,8 @@ def Home():
         Info = dm.InfoManager(path)
         uTab,UserTime,first,last,IsHere = Info.GetUserData(UserID)
         if(request.methos == 'POST'):
-            CurrentTime = 0 #FIXTHIS- what convention are we using for time??? just relized previous time in code is still not human readable, never fixed that.
+            now = datetime.datetime.now()
+            CurrentTime =  HumanReadable = now.strftime("%H:%M:%S")
             CurrentDate = str(datetime.date.month)+str(datetime.date.day)
             if(request.form['CheckIn']):
                 if(not IsHere):
@@ -144,6 +163,3 @@ def Home():
         Certificate = LoginInfo.WriteCertificate(path,UserID)       #new certificate
         response.set_cookie('Certificate',Certificate)
     return response
-
-
-    

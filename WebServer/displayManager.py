@@ -11,15 +11,15 @@ class InfoManager:
         files = [f for f in listdir(self.Path) if isfile(join(self.Path, f))]
         FileList = listdir(self.Path)
         if(date == "null"):
-            today = self.getSheet(str(datetime.date().month)+str(datetime.date().day)+"-wildstang_attendance")
-            date = str(datetime.date().month)+'/'+str(datetime.date().day)
+            today = self.getSheet(str(datetime.date.month)+str(datetime.date.day)+"-wildstang_attendance")
+            date = str(datetime.date.month)+'/'+str(datetime.date.day)
         else:
             if(str(date)+"-wildstang_attendance" in FileList):
                 today = self.getSheet(FileList[(str(date)+"-wildstangattendance")])
                 date = date[0:2]+'/'+date[2:]
             else:
-                today = self.getSheet(str(datetime.date().month)+str(datetime.date().day)+"-wildstang_attendance")
-                date = str(datetime.date().month)+'/'+str(datetime.date().day)
+                today = self.getSheet(str(datetime.date.month)+str(datetime.date.day)+"-wildstang_attendance")
+                date = str(datetime.date.month)+'/'+str(datetime.date.day)
         full = "<table>"
         aTable = full
         pTable = full
@@ -35,11 +35,11 @@ class InfoManager:
                 full.append("<td>"+today[c][c2]+"</td>")
                 c2 += 1
             if(len(today[c][3])<3):
-                absent.append(c)
-            elif(len(today[c][4])<3):
-                present.append(c)
+                absent.append(today[c])
+            elif(today[c][3]=today[c][4]):
+                present.append(today[c])
             else:
-                checkedout.append(c)
+                checkedout.append(today[c])
             c += 1
             full.append("</tr>")
         full.append("</table>")
@@ -47,6 +47,25 @@ class InfoManager:
         ptable = self.GenerateTable(present)
         ctable = self.GenerateTable(checkedout)
         return Table,date
+    def AdminDay(self,date = "null"):
+        files = [f for f in listdir(self.Path) if isfile(join(self.Path, f))]
+        FileList = listdir(self.Path)
+        if(date == "null"):
+            today = self.getSheet(str(datetime.date.month)+str(datetime.date.day)+"-wildstang_attendance")
+            date = str(datetime.date.month)+'/'+str(datetime.date.day)
+        else:
+            if(str(date)+"-wildstang_attendance" in FileList):
+                today = self.getSheet(FileList[(str(date)+"-wildstangattendance")])
+                date = date[0:2]+'/'+date[2:]
+            else:
+                today = self.getSheet(str(datetime.date.month)+str(datetime.date.day)+"-wildstang_attendance")
+                date = str(datetime.date.month)+'/'+str(datetime.date.day)
+        full = "<table>"
+        aTable = full
+        pTable = full
+        cTable = full
+        Table = self.GenerateEditableTable(today)
+        return Table
     def GetIds(self):
         today = self.getSheet(str(datetime.date.month)+str(datetime.date.day)+"-wildstang_attendance")
         return np.array(today[:,0]).tolist()
@@ -143,6 +162,29 @@ class InfoManager:
             
         #editIndexes = []
         sheetFile.close()
+    def GenerateEditableTable(self,matrix):
+        c = 0
+        out = "<table>"
+        while(c<len(matrix)): #generate summary tables
+            out.append("<tr>")
+            c2 = 1 #b/c 0 is the number 
+            while(c2<len(matrix[c])):
+                out.append("<td>"+matrix[c][c2]+"</td>")
+                c2 += 1
+            c += 1
+            out.append("""<td> <input type="text" placeholder="Check In" name="CheckIn" value="{{
+          request.form.CheckIn }}"></td>""")
+            out.append("""<td> <input type="text" placeholder="Check Out" name="CheckOut" value="{{
+          request.form.CheckOut }}"></td>""")
+            out.append("""<td> <input type="radio" name="CheckOut" value="{{
+          request.form.Edit"""+matrix[c][0]+"""}}"></td>""")
+            out.append("""<td> <input type="radio" name="CheckOut" value="{{
+          request.form.Edit"""+matrix[c][0]+"""}}"></td>""")
+            out.append("""<input type="submit" value="Submit">""")
+            out.append("</tr>")
+            
+        out.append("</table>")
+        return out
     def GenerateTable(self,matrix):
         c = 0
         out = "<table>"

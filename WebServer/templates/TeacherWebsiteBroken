@@ -1,0 +1,26 @@
+!DOCTYPE html>
+<html>
+    <head>
+    <title>Teacher Homepage</title>
+    <link rel="stylesheet" href="studentStyle.css"/>
+    </head>
+    <body>
+        <h1 class = "header">Student Homepage {% if name %}
+        {{ name }}
+      {% endif %}</h1>
+        <div class = "navbar">
+            <button class = "selected">Check in</button>
+            <button class = "selected">Check out</button>
+        </div>
+        {% if message %}
+        <h2> {{ message }}</h2>
+      {% endif %}
+        <br>
+        <input class = "streg"> Type in student name here</input>
+        <div class = "tab">
+        {% if table %}
+        {{ table }}
+      {% endif %}
+    </div>
+    </body>
+</html>

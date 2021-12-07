@@ -47,7 +47,7 @@ class InfoManager:
         ptable = self.GenerateTable(present)
         ctable = self.GenerateTable(checkedout)
         return Table,date
-    def AdminDay(self,date = "null"):
+    def AdminDay(self,date = "null"): #return table with editing boxes
         files = [f for f in listdir(self.Path) if isfile(join(self.Path, f))]
         FileList = listdir(self.Path)
         if(date == "null"):

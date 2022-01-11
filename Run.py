@@ -18,18 +18,21 @@ e = im.Exit()
 readwrite = rw.ReadWrite(TodayPath,60)
 #readwrite.getSheet()
 readwrite.daysFile()
+
 while True:
     i.ImageLoop(readwrite,e)
     print("autosaving. blink LED or something")
     readwrite.setSheet(readwrite.sheet)
     print("autosave complete")
 
-    if datetime.date.weekday(datetime.date.year, datetime.date.month, datetime.date.day) != 5:
-        if datetime.time.hour == 21:
-            True
+    if datetime.date.weekday(datetime.date.year, datetime.date.month, datetime.date.day) != 5: #if not Saturday
+        if datetime.time.hour == 21: #if its 9pm
+            shutDown(True)
+            readWriter
 
-    if datetime.date.weekday(datetime.date.year, datetime.date.month, datetime.date.day) == 5:
-        if datetime.time.hour == 13:
-            True
+    if datetime.date.weekday(datetime.date.year, datetime.date.month, datetime.date.day) == 5: #in Saturday
+        if datetime.time.hour == 13: #if its 1pm
+            shutDown(True)
 
-
+def shutDown(boolean):
+    True 

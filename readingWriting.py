@@ -7,7 +7,6 @@ import numpy as np
 import datetime
 
 rows = []
-editIndexes = [[],[]] # [[index of the sign in],[]]
 
 class ReadWrite:
     def __init__(self,path,MinTime):
@@ -22,6 +21,8 @@ class ReadWrite:
         self.minTime = MinTime
                     #"Temporary/Path/FixThis"
    # self.minTime = 60
+    def signOut(self):
+        for i in self.sheet
     def daysFile():
         filename = "D:/"+str(datetime.date().month)+str(datetime.date().day)+str((datetime.date().year)-2000)+"-WildStang_Attendance.csv"
         daysFile = open(filename,"r")
@@ -44,7 +45,7 @@ class ReadWrite:
             return "File created"
 
     def readBar(self,image):    #gets image bar code
-        global editIndexes
+        
         path = self.path           
         MinTime = self.minTime      
         print("scanning...")
@@ -77,7 +78,6 @@ class ReadWrite:
                         self.Times.append(logIn)
                         self.Barcodes.append(int(barcode.data))
                         index = self.sheet[:][0].index(int(barcode.data))
-                       # editIndexes.append([index,logIn]) #logs the activity
                         print('Welcome,'+self.sheet[index][1])
                         self.sheet[index][4] = HumanReadable
                         if(self.sheet[index][3] == -1):
@@ -91,7 +91,6 @@ class ReadWrite:
                         index = self.sheet[:][0].index(int(barcode.data))
                         print('Welcome,'+self.sheet[index][1])
                         self.sheet[index][4] = HumanReadable
-                        editIndexes.append([index,logIn]) #logs the activity
                         if(self.sheet[index][3] == -1):
                             self.sheet[index][3] = HumanReadable
                     else:
@@ -138,25 +137,11 @@ class ReadWrite:
     def write(self,s): #wrapper
         self.readBar(s)
         
-        
-    #def organizeIndexes():
-    #    global editIndexes
-    #    tempMatrix = []
-    #    tempIndex = int
-
-    #    for i in editIndexes:
-    #        inserted = False
-    #        tempIndex = editIndexes[[i][0]]
-    #        for j in tempMatrix:
-    #            if (tempMatrix[[j][0]] < tempIndex & inserted == False):
-    #                tempMatrix.insert(j, editIndexes[i])
-    #                inserted = True
-    #        if (inserted == False):
-    #            tempMatrix.appened(editIndexes[i])
-    #    editIndexes = [[],[]]
-    #    editIndexes = tempMatrix
 class Wrapper(object):
     def __init__(self,function):
         self.function = function
     def write(self,s):
         self.function(s)
+
+
+
